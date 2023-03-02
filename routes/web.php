@@ -12,8 +12,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', function () {
+    return view('auth.login');
+});
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::get("/{page}",'AdminController@index');
 

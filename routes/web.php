@@ -18,6 +18,7 @@ Route::get('/', function () {
 
 Auth::routes(['register' => false]);
 Route::resource('invoices', 'InvoiceController');
+Route::resource('sections', 'SectionController');
 Route::get("/{page}",'AdminController@index');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Section;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class SectionController extends Controller
 {
     /**
@@ -15,7 +15,8 @@ class SectionController extends Controller
     public function index()
     {
         //
-        return view('sections.index');
+        $sections=Section::all();
+        return view('sections.index')->with('sections',$sections);
     }
 
     /**
@@ -37,6 +38,18 @@ class SectionController extends Controller
     public function store(Request $request)
     {
         //
+            $data=$request->validate([
+                'name'=>'required|unique:sections,name|max:255',
+                'desc'=>'required',
+            ]);
+      
+            Section::create([
+                'name'=>$data['name'],
+                'description'=>$data['desc'],
+                'created_by'=>(Auth::user()->name),
+            ]);
+            return redirect()->back()->with('success','Section created successfully');
+         
     }
 
     /**
@@ -68,9 +81,27 @@ class SectionController extends Controller
      * @param  \App\Models\Section  $section
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Section $section)
+    public function update(Request $request)
     {
-        //
+        //check if the section name is unique
+           
+        $id=$request->id;
+             $this -> validate($request,[
+                'name'=>'required|unique:sections,name,'.$id,
+                'desc'=>'required',
+            ],
+            [
+                'name.required'=>'Section name is required',
+                'name.unique'=>'Section name already exists',
+                'desc.required'=>'Section description is required',
+            ]
+        );
+            Section::where('id',$request->id)->update([
+                'name'=>$request->name,
+                'description'=>$request->desc,
+            ]);
+            
+            return redirect()->back()->with('success','Section updated successfully');  
     }
 
     /**
@@ -79,8 +110,19 @@ class SectionController extends Controller
      * @param  \App\Models\Section  $section
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Section $section)
+    public function destroy(Request $section)
     {
-        //
+        
+        $find=Section::findOrFail($section->id);
+
+        if($find) 
+        {
+            $find->delete();
+            return redirect()->back()->with('success','Section deleted successfully');
+        } 
+        else 
+            return redirect()->back()->with('error','Section not found');
+      
+        
     }
 }

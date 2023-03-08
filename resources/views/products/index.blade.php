@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Sections @endsection
+@section('title') Products @endsection
 @section('css')
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
@@ -51,7 +51,7 @@
 								</div>
 							</div>
 							<div class="card-body">
-								<a class="modal-effect btn btn-outline-primary btn-block"  style="width:15%;margin-bottom:1em;" data-effect="effect-scale" data-toggle="modal" href="#modaldemo1">Add Section</a>
+								<a class="modal-effect btn btn-outline-primary btn-block"  style="width:15%;margin-bottom:1em;" data-effect="effect-scale" data-toggle="modal" href="#modaldemo1">Add Product</a>
 								<div class="table-responsive">
 									<table id="example1" class="table key-buttons text-md-nowrap">
 										<thead>
@@ -74,12 +74,12 @@
 												<td>
 													<a type="button" class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
                                                        data-id="{{ $product->id }}" data-name="{{ $product->name }}"
-                                                       data-description="{{ $product->description }}" data-toggle="modal" href="#exampleModal2"
+                                                       data-description="{{ $product->description }}" data-section="{{$product->section->id}}" data-toggle="modal" href="#exampleModal2"
                                                        title="تعديل">
 													   Edit
 											    	</a>
 													<a type="button" class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
-                                                       data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-toggle="modal"
+                                                       data-id="{{ $product->id }}" data-name="{{ $product->name }}"  data-toggle="modal"
                                                        href="#modaldemo9" title="حذف">
 													   Delete
 													</a>
@@ -156,14 +156,17 @@
 												<div class="form-group">
 													<input type="hidden" name="id" id="id" value="">
 													<label for="recipient-name" class="col-form-label"> Product name:</label>
-													<input class="form-control" name="name" id="section_name" type="text">
+													<input class="form-control" name="name" id="product_name" type="text">
 												</div>
                                                 <div class="form-group">
                                                     <label for="recipient-name" class="col-form-label"> Section name:</label>
 													<select class="form-control" name="section_id" id="section_id">
-                                                        @foreach ($sections as $section)
-                                                        <option value="{{$section->id}}">{{$section->name}}</option>
-                                                        @endforeach
+                                                       @foreach ($sections as $section)
+													    @if($section->id == $product->section_id)
+                                                           <option value="{{$section->id}}" selected> {{$section->name}}</option>
+														@endif
+														<option value="{{$section->id}}">{{$section->name}}</option>
+														@endforeach
                                                     </select>
 												</div>
 												<div class="form-group">
@@ -187,13 +190,13 @@
 											<h6 class="modal-title">Delete </h6><button aria-label="Close" class="close" data-dismiss="modal"
 																						type="button"><span aria-hidden="true">&times;</span></button>
 										</div>
-										<form action="sections/destroy" method="post">
+										<form action="products/destroy" method="post">
 											@method('delete')
 											@csrf
 											<div class="modal-body">
 												<p>  Are you sure you want to delete this product?</p><br>
 												<input type="hidden" name="id" id="id" value="">
-												<input class="form-control" name="name" id="section_name" type="text" readonly>
+												<input class="form-control" name="name" id="product_name" type="text" readonly>
 											</div>
 											<div class="modal-footer">
 												<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
@@ -239,20 +242,22 @@
         $('#exampleModal2').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
             var id = button.data('id')
-            var section_name = button.data('name')
+            var product_name = button.data('name')
+			var section_name = button.data('section')
             var description = button.data('description')
             var modal = $(this)
             modal.find('.modal-body #id').val(id);
-            modal.find('.modal-body #section_name').val(section_name);
+            modal.find('.modal-body #product_name').val(product_name);
+			modal.find('.modal-body #section_id').val(section_name);
             modal.find('.modal-body #description').val(description);
         })
 		$('#modaldemo9').on('show.bs.modal', function(event) {
 			var button = $(event.relatedTarget)
 			var id = button.data('id')
-			var section_name = button.data('name')
+			var product_name = button.data('name')
 			var modal = $(this)
 			modal.find('.modal-body #id').val(id);
-			modal.find('.modal-body #section_name').val(section_name);
+			modal.find('.modal-body #product_name').val(product_name);
 		})
     </script>
 

@@ -39,7 +39,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data=$request->validate([
+            'name'=>'required|string|max:255',
+            'desc'=>'nullable|string',
+            'section_id'=>'required|exists:sections,id',
+        ]);
+        Product::create([
+            'name'=>$data['name'],
+            'description'=>$data['desc'],
+            'section_id'=>$data['section_id'],
+        ]);
+        return redirect()->back()->with('success','Product created successfully');
     }
 
     /**
@@ -71,9 +81,20 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request)
     {
-        //
+        $data=$request->validate([
+            'name'=>'required|string|max:255',
+            'desc'=>'nullable|string',
+            'section_id'=>'required|exists:sections,id',
+        ]);
+
+        Product::where('id',$request->id)->update([
+            'name'=>$data['name'],
+            'description'=>$data['desc'],
+            'section_id'=>$data['section_id'],
+        ]);
+        return redirect()->back()->with('success','Product updated successfully');
     }
 
     /**
@@ -82,8 +103,10 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Request $product)
     {
         //
+        Product::where('id',$product->id)->delete();
+        return redirect()->back()->with('success','Product deleted successfully');
     }
 }

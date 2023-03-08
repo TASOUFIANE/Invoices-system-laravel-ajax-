@@ -11,7 +11,7 @@ class Product extends Model
     use HasFactory;
 
 
-    protected $fillable = ['name', 'description', 'section_id', 'created_by'];
+    protected $fillable = ['name', 'description', 'section_id'];
 
     public function section()
     {

@@ -37,7 +37,7 @@ Invoices
 									<h4 class="card-title mg-b-0">Invoices Table</h4>
 									<i class="mdi mdi-dots-horizontal text-gray"></i>
 								</div>
-								<p class="tx-12 tx-gray-500 mb-2">Example of Valex Bordered Table.. <a href="">Learn more</a></p>
+								<a class="modal-effect btn btn-outline-primary btn-block"  style="width:15%;margin:1em 0.5em;"  href="{{ route("invoices.create") }}">Add Invoices <i class="fas-fa-plus"> </i></a>
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">

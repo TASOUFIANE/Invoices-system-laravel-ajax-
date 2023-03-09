@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Invoice;
+use App\Models\Section;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -24,7 +26,10 @@ class InvoiceController extends Controller
      */
     public function create()
     {
+  
         //
+        $sections=Section::all();
+        return view('invoices.add-invoice',compact('sections'));
     }
 
     /**
@@ -81,5 +86,11 @@ class InvoiceController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getProducts($id)
+    {
+        $products=Product::where('section_id',$id)->pluck('name','id');
+        return json_encode($products);
     }
 }

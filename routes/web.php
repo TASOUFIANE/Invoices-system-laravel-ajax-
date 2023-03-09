@@ -17,7 +17,9 @@ Route::get('/', function () {
 });
 
 Auth::routes(['register' => false]);
+
 Route::resource('invoices', 'InvoiceController');
+Route::get('/section/{id}','InvoiceController@getProducts');
 Route::resource('sections', 'SectionController');
 Route::resource('products', 'ProductController');
 Route::get("/{page}",'AdminController@index');

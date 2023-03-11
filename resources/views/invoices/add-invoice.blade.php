@@ -209,9 +209,7 @@
         var date = $('.fc-datepicker').datepicker({
             dateFormat: 'yy-mm-dd'
         }).val();
-    </script>
 
-    <script>
         $(document).ready(function() {
             $('select[name="Section"]').on('change', function() {
                 var SectionId = $(this).val();
@@ -234,12 +232,9 @@
                 }
             });
         });
-    </script>
-
-
-    <script>
         function myFunction() {
             var Amount_Commission = parseFloat(document.getElementById("Amount_Commission").value);
+            console.log(Amount_Commission);
             var Discount = parseFloat(document.getElementById("Discount").value);
             var Rate_VAT = parseFloat(document.getElementById("Rate_VAT").value);
             var Value_VAT = parseFloat(document.getElementById("Value_VAT").value);

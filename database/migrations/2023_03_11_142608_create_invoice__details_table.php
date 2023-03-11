@@ -18,10 +18,10 @@ class CreateInvoiceDetailsTable extends Migration
             $table->string('invoice_number', 50);
             $table->foreignId('id_Invoice')->constrained('invoices')->onDelete('cascade');
             $table->string('product', 50);
-            $table->string('Section', 999);
-            $table->string('Status', 50);
-            $table->integer('Value_Status');
-            $table->date('Payment_Date')->nullable();
+            $table->string('section', 999);
+            $table->string('status', 50);
+            $table->integer('value_Status');
+            $table->date('payment_Date')->nullable();
             $table->text('note')->nullable();
             $table->string('user',300);
             $table->timestamps();

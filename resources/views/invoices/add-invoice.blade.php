@@ -21,7 +21,7 @@
         <div class="my-auto">
             <div class="d-flex">
                 <h4 class="content-title mb-0 my-auto">Invoices</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                     Add Invoice</span>
+                    Add Invoice</span>
             </div>
         </div>
     </div>
@@ -29,24 +29,27 @@
 @endsection
 @section('content')
 
-    @if (session()->has('Add'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>{{ session()->get('Add') }}</strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
 
     <!-- row -->
     <div class="row">
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger">
+                    {{ $error }}
+                </div>
+            @endforeach
+        @elseif(session()->has('success'))
+            <div class="alert alert-success">
+                {{ session()->get('success') }}
+            </div>
+        @endif
 
         <div class="col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-body">
                     <form action="{{ route('invoices.store') }}" method="post" enctype="multipart/form-data"
                         autocomplete="off">
-                       @csrf
+                        @csrf
                         {{-- 1 --}}
 
                         <div class="row">
@@ -58,13 +61,13 @@
 
                             <div class="col">
                                 <label> Invoice Date</label>
-                                <input class="form-control fc-datepicker" name="invoice_Date" placeholder="YYYY-MM-DD"
+                                <input class="form-control fc-datepicker" name="invoice_date" placeholder="YYYY-MM-DD"
                                     type="text" value="{{ date('Y-m-d') }}" required>
                             </div>
 
                             <div class="col">
                                 <label> Date of Paying</label>
-                                <input class="form-control fc-datepicker" name="Due_date" placeholder="YYYY-MM-DD"
+                                <input class="form-control fc-datepicker" name="due_date" placeholder="YYYY-MM-DD"
                                     type="text" required>
                             </div>
 
@@ -74,7 +77,7 @@
                         <div class="row">
                             <div class="col">
                                 <label for="inputName" class="control-label">Section</label>
-                                <select name="Section" class="form-control SlectBox" onclick="console.log($(this).val())"
+                                <select name="section" class="form-control SlectBox" onclick="console.log($(this).val())"
                                     onchange="console.log('change is firing')">
                                     <!--placeholder-->
                                     <option value="" selected disabled>حدد القسم</option>
@@ -92,7 +95,7 @@
 
                             <div class="col">
                                 <label for="inputName" class="control-label"> Amount Of paying</label>
-                                <input type="text" class="form-control" id="inputName" name="Amount_collection"
+                                <input type="text" class="form-control" id="inputName" name="amount_collection"
                                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </div>
                         </div>
@@ -105,14 +108,14 @@
                             <div class="col">
                                 <label for="inputName" class="control-label">مبلغ العمولة</label>
                                 <input type="text" class="form-control form-control-lg" id="Amount_Commission"
-                                    name="Amount_Commission" title="يرجي ادخال مبلغ العمولة "
+                                    name="amount_commission" title="يرجي ادخال مبلغ العمولة "
                                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                                     required>
                             </div>
 
                             <div class="col">
                                 <label for="inputName" class="control-label">Discount</label>
-                                <input type="text" class="form-control form-control-lg" id="Discount" name="Discount"
+                                <input type="text" class="form-control form-control-lg" id="Discount" name="discount"
                                     title="يرجي ادخال مبلغ الخصم "
                                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                                     value=0 required>
@@ -120,7 +123,7 @@
 
                             <div class="col">
                                 <label for="inputName" class="control-label">Value added tax rate</label>
-                                <select name="Rate_VAT" id="Rate_VAT" class="form-control" onchange="myFunction()">
+                                <select name="rate_vat" id="Rate_Vat" class="form-control" onchange="myFunction()">
                                     <!--placeholder-->
                                     <option value="" selected disabled> Select percentage of tax </option>
                                     <option value="5%">5%</option>
@@ -135,12 +138,12 @@
                         <div class="row">
                             <div class="col">
                                 <label for="inputName" class="control-label">قيمة ضريبة القيمة المضافة</label>
-                                <input type="text" class="form-control" id="Value_VAT" name="Value_VAT" readonly>
+                                <input type="text" class="form-control" id="Value_VAT" name="value_vat" readonly>
                             </div>
 
                             <div class="col">
                                 <label for="inputName" class="control-label">الاجمالي شامل الضريبة</label>
-                                <input type="text" class="form-control" id="Total" name="Total" readonly>
+                                <input type="text" class="form-control" id="Total" name="total" readonly>
                             </div>
                         </div>
 
@@ -156,8 +159,8 @@
                         <h5 class="card-title">المرفقات</h5>
 
                         <div class="col-sm-12 col-md-12">
-                            <input type="file" name="pic" class="dropify" accept=".pdf,.jpg, .png, image/jpeg, image/png"
-                                data-height="70" />
+                            <input type="file" name="file" class="dropify"
+                                accept=".pdf,.jpg, .png, image/jpeg, image/png" data-height="70" />
                         </div><br>
 
                         <div class="d-flex justify-content-center">
@@ -211,7 +214,7 @@
         }).val();
 
         $(document).ready(function() {
-            $('select[name="Section"]').on('change', function() {
+            $('select[name="section"]').on('change', function() {
                 var SectionId = $(this).val();
                 if (SectionId) {
                     $.ajax({
@@ -223,7 +226,7 @@
                             $.each(data, function(key, value) {
                                 $('select[name="product"]').append('<option value="' +
                                     value + '">' + value + '</option>');
-                                console.log(data);
+                                console.log(value);
                             });
                         },
                     });
@@ -232,11 +235,11 @@
                 }
             });
         });
+
         function myFunction() {
             var Amount_Commission = parseFloat(document.getElementById("Amount_Commission").value);
-            console.log(Amount_Commission);
             var Discount = parseFloat(document.getElementById("Discount").value);
-            var Rate_VAT = parseFloat(document.getElementById("Rate_VAT").value);
+            var Rate_VAT = parseFloat(document.getElementById("Rate_Vat").value);
             var Value_VAT = parseFloat(document.getElementById("Value_VAT").value);
             var Amount_Commission2 = Amount_Commission - Discount;
             if (typeof Amount_Commission === 'undefined' || !Amount_Commission) {

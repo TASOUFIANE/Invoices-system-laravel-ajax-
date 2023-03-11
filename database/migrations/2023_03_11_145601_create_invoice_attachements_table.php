@@ -18,7 +18,7 @@ class CreateInvoiceAttachementsTable extends Migration
             $table->string('file_name', 999);
             $table->string('invoice_number', 50);
             $table->string('created_by', 999);
-            $table->foreignId('invoice_id')->constrained('invoices')->sonDelete('cascade');
+            $table->foreignId('invoice_id')->constrained('invoices')->onDelete('cascade');
             $table->timestamps();
         });
     }

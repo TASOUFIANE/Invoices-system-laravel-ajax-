@@ -162,9 +162,6 @@
                                                     <label for="recipient-name" class="col-form-label"> Section name:</label>
 													<select class="form-control" name="section_id" id="section_id">
                                                        @foreach ($sections as $section)
-													    @if($section->id == $product->section_id)
-                                                           <option value="{{$section->id}}" selected> {{$section->name}}</option>
-														@endif
 														<option value="{{$section->id}}">{{$section->name}}</option>
 														@endforeach
                                                     </select>

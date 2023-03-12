@@ -55,8 +55,10 @@
                                     <th class="border-bottom-0">Discount</th>
                                     <th class="border-bottom-0">fees percentage</th>
                                     <th class="border-bottom-0">fees value</th>
-                                    <th class="border-bottom-0">Total</th>
                                     <th class="border-bottom-0">Status</th>
+                                    <th class="border-bottom-0">Total</th>
+                                    <th class="border-bottom-0">Actions</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,15 +66,30 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $invoice->invoice_number }}</td>
-                                        <td>{{ $invoice->invoice_date }}</td>
+                                        <td>{{ $invoice->invoice_Date }}</td>
                                         <td>{{ $invoice->due_date }}</td>
                                         <td>{{ $invoice->product }}</td>
-                                        <td>{{ $invoice->section->section_name }}</td>
+                                        <td>{{ $invoice->section->name }}</td>
                                         <td>{{ $invoice->discount }}</td>
                                         <td>{{ $invoice->rate_vat }}</td>
                                         <td>{{ $invoice->value_vat }}</td>
+                                        <td>
+                                            @if ($invoice->value_status == 1)
+                                                <span class="badge badge-success">{{ $invoice->status }}</span>
+                                            @elseif($invoice->value_statuss == 2)
+                                                <span class="badge badge-danger">{{ $invoice->status }}</span>
+                                            @else
+                                                <span class="badge badge-warning">{{ $invoice->status }}</span>
+                                            @endif
+                                        </td>
                                         <td>{{ $invoice->total }}</td>
-                                        <td>{{ $invoice->status }} </td>
+                                        <td>
+                                            <a class="btn btn-sm btn-info"
+                                                href="{{ url("/invoicedetails/{$invoice->id}") }}" title="Edit"><i
+                                                    class="las la-pen"></i></a>
+                                            <a class="btn btn-sm btn-danger" href="#" title="Delete"><i
+                                                    class="las la-trash"></i></a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
